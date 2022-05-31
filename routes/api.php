@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::middleware('auth_api')->match(['post','get'],'/user/{id}',function (Request $request,$id){
+   $user = \App\Models\User::find($id);
+   if (!$user) return response('',404);
+   return $user;
+});
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

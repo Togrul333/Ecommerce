@@ -2,12 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\ProductFilter;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class FetchController extends Controller
 {
+    public function search(ProductFilter $request)
+    {
+
+        $products = Product::filter($request)->get();
+        $categories = Category::all();
+
+
+        return view('serch.serch',compact('products','categories'));
+    }
+
+
     public function fetch()
     {
     return view('fetch.fetch');

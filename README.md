@@ -92,7 +92,166 @@ template blade lere ayirmag
 
 
 
+==========================================================================================================================================
 
+                PHP DocBlock
+
+/**
+* Some description
+*
+*   arqumentler
+* @param User $sds
+* @param int|string $sdgg
+*
+* что будет выброшина
+* @throws \RuntimeException
+*
+* @var float
+*
+* @property-read int
+* @property-write int
+* @property int
+*
+* @method static int foo(string $s)
+*
+*
+* @return bool
+*/
+public function admins($sds,$sdgg):bool
+{
+return true;
+}
+
+
+
+
+
+
+
+==============================================================================================================================
+
+
+                                Laravel Gates.
+    Политики это способы организацыи гейтов
+
+// Route::get('/admin',[\App\Http\Controllers\Admin\ProductController::class,'admin'])->middleware('can:view-protected-part')->name('admin');
+
+указываем миддлевару то действие(права на выполнение которого вы проверяете)
+-------- middleware('can:view-protected-part')
+
+внутырь функцые мы пробрасываем дополнителные параметры ($page)
+
+    Gate::define('view-protected-part', function (?User $user,$page=null) {
+            if ($user) {
+               return $user->id === $page->author_id;
+            }
+            return false;
+        });
+
+
+    public function admin()
+    {
+        // перед тем как вюшка будет отдана пользователю  будем проверять токое право
+//        Gate::authorize('view-protected-part');
+//     if .....   Gate::check('view-protected-part');
+
+//        Gate::allows('view-protected-part');
+
+
+//        // Более расширенно получает класс респонсе
+//        $response = Gate::inspect('view-protected-part');
+//        // и данный респонсе содержит мотод allowed() если вернет true
+//        $response->allowed();
+//        
+//        // и данный респонсе содержит мотод denied() если вернет false
+//        $response->denied();
+//
+//        // и данный респонсе содержит мотод message() который получет информацыю из гейта
+//        $response->message();
+
+
+
+        $this->authorize('view-protected-part');
+
+        //есть  какой нибудь из них из гейтов
+////        if (Gate::any(['view-protected-part','view-protected-part2'])){
+////            //razreseno
+////        }
+
+
+        //нет  какогота  из них из гейтов обратное действие
+////        if (Gate::none(['view-protected-part','view-protected-part2'])){
+////            //razreseno
+////        }
+///
+
+        // все ети проверки можно зделать в бладе с помошь @can('view-protected-part') @endcan
+
+
+
+        return view('admin.index');
+    }
+
+==================================================================================================
+ Вларавель также дредусмотрен автоматический поиск политик  то есть 
+ если соблюдать определенные соглашения по именеванию классав то ларавель сам найдет политику
+
+    php artisan make:policy InnerContentPolicy
+
+
+# resource контроллеры 
+
+    php artisan make:policy UserPolicy --model=User
+
+    php artisan make:controller UserController --model=User
+
+# связав __construct в контроллере все методы прежде чем сработать будут смотрет тот метод в UserPolicy толко потом работать
+   public function __construct()
+   {
+        $this->authorizeResource(User::class,'user');
+    }
+
+========================================================================================================
+
+#  Laravel. Сервисы, контракты и внедрение зависимостей
+
+
+================================================================================================================
+
+Добавление пользовательских guards
+
+
+Her bir middleware ye biz parametir vere bilirik
+o parametirlar guard dir 
+
+
+Вы можете определить свои собственные средства защиты аутентификации,
+
+
+class AuthServiceProvider extends ServiceProvider
+{
+/**
+* Register any application authentication / authorization services.
+*
+* @return void
+*/
+public function boot()
+{
+$this->registerPolicies();
+
+        Auth::extend('jwt', function ($app, $name, array $config) {
+            // Return an instance of Illuminate\Contracts\Auth\Guard...
+ 
+            return new JwtGuard(Auth::createUserProvider($config['provider']));
+        });
+    }
+}
+
+Как видно из приведенного выше примера, обратный вызов, переданный extendметоду,
+должен возвращать реализацию Illuminate\Contracts\Auth\Guard. Этот интерфейс содержит несколько методов, 
+которые вам нужно будет реализовать, чтобы определить пользовательскую защиту. После того, 
+как ваш собственный сторож был определен, вы можете сослаться 
+на него в guardsконфигурации вашего auth.phpконфигурационного файла:
 
 
 

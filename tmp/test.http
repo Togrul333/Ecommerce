@@ -1,0 +1,15 @@
+GET http://127.0.0.1:8000/api/user/1
+Accept: application/json
+Authorization: Bearer sdfghjklrdgrgrrggerlkjhg
+###
+
+GET http://127.0.0.1:8000/api/user/1?api_token=sdfghjklrdgrgrrggerlkjhg
+Accept: application/json
+###
+
+POST  http://127.0.0.1:8000/api/user/1
+Content-Type: application/x-www-form-urlencoded
+
+api_token=sdfghjklrdgrgrrggerlkjhg
+
+###

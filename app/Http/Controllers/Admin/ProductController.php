@@ -5,13 +5,77 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
+
+
+    /**
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+
     public function admin()
     {
+        // перед тем как вюшка будет отдана пользователю  будем проверять токое право
+//        Gate::authorize('view-protected-part');
+//     if .....   Gate::check('view-protected-part');
+
+//        Gate::allows('view-protected-part');
+
+
+//        // Более расширенно получает класс респонсе
+//        $response = Gate::inspect('view-protected-part');
+//        if ($response->denied()){
+//            return $response->message();
+//        }
+
+
+
+
+        //        $response = Gate::inspect('view-protected-part');
+//        // и данный респонсе содержит мотод allowed() если вернет true
+//        $response->allowed();
+//
+//        // и данный респонсе содержит мотод denied() если вернет false
+//        $response->denied();
+//
+//        // и данный респонсе содержит мотод message() который получет информацыю из гейта
+//        $response->message();
+
+
+
+//        $this->authorize('view-protected-part');
+
+        //есть  какой нибудь из них из гейтов
+////        if (Gate::any(['view-protected-part','view-protected-part2'])){
+////            //razreseno
+////        }
+
+
+        //нет  какогота  из них из гейтов обратное действие
+////        if (Gate::none(['view-protected-part','view-protected-part2'])){
+////            //razreseno
+////        }
+///
+
+        // все ети проверки можно зделать в бладе с помошь @can('view-protected-part') @endcan
+
+//=========================================================================================================
+
+        // обратите внимание на синтаксис здесь мы пишем кебаб кейсе а внутри политики (viewProtectedPart) камлкейсе
+//     $this->authorize('view-protected-part',[self::class]);
+
+        $response = Gate::inspect('view-protected-part',[self::class]);
+        if ($response->denied())
+        {
+            abort($response->code(),$response->message());
+        }
+
         return view('admin.index');
     }
 

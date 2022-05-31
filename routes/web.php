@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 //fetch
 Route::get('/fetch',[\App\Http\Controllers\FetchController::class,'fetch']);
 
+Route::get('/search',[\App\Http\Controllers\FetchController::class,'search'])->name('products');
+
 
 //auth
 Route::get('/login',[\App\Http\Controllers\AuthController::class,'login'])->name('login');
@@ -36,7 +38,7 @@ Route::resource('/carts',\App\Http\Controllers\CartController::class);
 
 
 // Admin routes
-Route::get('/admin',[\App\Http\Controllers\Admin\ProductController::class,'admin'])->name('admin');
+Route::get('/admin',[\App\Http\Controllers\Admin\ProductController::class,'admin'])->middleware('auth')->name('admin');
 Route::resource('products',\App\Http\Controllers\Admin\ProductController::class);
 
 
